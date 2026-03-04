@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APIFLAIR - Protecting Our Food Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Day palette */
+  --honey: #F2A900;
+  --deep-earth: #1a1506;
+  --wheat: #E8D5B5;
+  --sage: #8B9556;
+  --sky-day: #b4d8ea;
+  --sky-night: #0b1026;
+  --sky: var(--sky-day);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--deep-earth);
+  overflow-x: hidden;
+  transition: background 1.5s ease, color 1.5s ease;
+}
+
+body.night {
+  background: var(--sky-night);
+  color: #d4cfc7;
+}
+body.day {
+  background: var(--sky-day);
+  color: var(--deep-earth);
+}
+
+/* ===== INTERACTIVE FARM BACKGROUND CANVAS ===== */
+#farm-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ===== HEADER ===== */
+header {
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.8s ease-out;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+.cta-button {
+  background: var(--honey);
+  color: var(--deep-earth);
+  padding: 0.8rem 2rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.cta-button:hover {
+  background: var(--deep-earth);
+  color: var(--honey);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26, 21, 6, 0.2);
+}
+
+body.night .cta-button:hover {
+  background: #f2a900;
+  color: var(--deep-earth);
+  box-shadow: 0 8px 25px rgba(242, 169, 0, 0.25);
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 4rem 5% 6rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 1s ease-out 0.3s both;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  max-width: 800px;
+}
+
+.hero h1 .highlight {
+  color: var(--sage);
+  position: relative;
+  display: inline-block;
+}
+
+body.night .hero h1 .highlight {
+  color: #c2cc8a;
+}
+
+.hero h1 .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0.1em;
+  left: 0;
+  width: 100%;
+  height: 0.15em;
+  background: var(--honey);
+  opacity: 0.3;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #4a4237;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  line-height: 1.6;
+  transition: color 1.5s ease;
+}
+
+body.night .hero-subtitle {
+  color: #a8a196;
+}
+
+/* ===== PROBLEM GRID ===== */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 5rem auto;
+  max-width: 1200px;
+  padding: 0 5%;
+  position: relative;
+  z-index: 2;
+}
+
+.problem-card {
+  background: white;
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 1.5s ease;
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+body.night .problem-card {
+  background: #161b35;
+  border: 1px solid rgba(242, 169, 0, 0.1);
+}
+
+.problem-card:nth-child(1) { animation-delay: 0.5s; }
+.problem-card:nth-child(2) { animation-delay: 0.7s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.problem-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--honey), var(--sage));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.problem-card:hover::before {
+  transform: scaleX(1);
+}
+
+.problem-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(26, 21, 6, 0.1);
+}
+
+body.night .problem-card:hover {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.problem-number {
+  font-family: 'Crimson Pro', serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--wheat);
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+body.night .problem-number {
+  color: #f2a900;
+  opacity: 0.15;
+}
+
+.problem-card h3 {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.problem-card p {
+  line-height: 1.7;
+  color: #5a5147;
+  margin-bottom: 1rem;
+  transition: color 1.5s ease;
+}
+
+body.night .problem-card p {
+  color: #9e978e;
+}
+
+.stat {
+  display: inline-block;
+  background: var(--honey);
+  color: var(--deep-earth);
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+/* ===== IMPACT SECTION ===== */
+.impact-section {
+  background: var(--deep-earth);
+  color: var(--wheat);
+  padding: 6rem 5%;
+  margin: 5rem 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.impact-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(242, 169, 0, 0.1) 0%, transparent 70%);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.impact-content {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.impact-section h2 {
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.impact-section p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.ecosystem-note {
+  background: rgba(242, 169, 0, 0.1);
+  border-left: 4px solid var(--honey);
+  padding: 2rem;
+  margin: 3rem auto;
+  max-width: 700px;
+  font-style: italic;
+  text-align: left;
+}
+
+/* ===== SOLUTION & WAITLIST ===== */
+.solution-teaser {
+  text-align: center;
+  padding: 6rem 5%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.solution-teaser h2 {
+  font-family: 'Crimson Pro', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.solution-teaser p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #4a4237;
+  margin-bottom: 2rem;
+  transition: color 1.5s ease;
+}
+
+body.night .solution-teaser p {
+  color: #a8a196;
+}
+
+.waitlist-box {
+  background: white;
+  padding: 3rem 2rem;
+  margin: 3rem auto;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(26, 21, 6, 0.1);
+  transition: background 1.5s ease, box-shadow 1.5s ease;
+}
+
+body.night .waitlist-box {
+  background: #161b35;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  border: 1px solid rgba(242,169,0,0.1);
+}
+
+.waitlist-box h3 {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.waitlist-box > p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: #5a5147;
+  transition: color 1.5s ease;
+}
+
+body.night .waitlist-box > p {
+  color: #9e978e;
+}
+
+/* Waitlist Form */
+.waitlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.waitlist-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: -0.5rem;
+}
+
+.waitlist-form input,
+.waitlist-form select,
+.waitlist-form textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 2px solid #e0d8ce;
+  background: #faf8f5;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  outline: none;
+}
+
+body.night .waitlist-form input,
+body.night .waitlist-form select,
+body.night .waitlist-form textarea {
+  border-color: #2a2f4a;
+  background: #0e1228;
+  color: #d4cfc7;
+}
+
+.waitlist-form input:focus,
+.waitlist-form select:focus,
+.waitlist-form textarea:focus {
+  border-color: var(--honey);
+}
+
+.waitlist-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.form-success .check-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1rem;
+}
+
+.form-success h4 {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-success p {
+  color: #5a5147;
+  font-size: 0.95rem;
+}
+
+body.night .form-success p {
+  color: #9e978e;
+}
+
+.submit-btn {
+  margin-top: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+/* ===== TIME TOGGLE ===== */
+.time-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--honey);
+  background: rgba(255,255,255,0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
+}
+
+body.night .time-toggle {
+  background: rgba(22,27,53,0.9);
+  box-shadow: 0 4px 20px rgba(242,169,0,0.15);
+}
+
+.time-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--deep-earth);
+  color: var(--wheat);
+  padding: 3rem 5%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+footer a {
+  color: var(--honey);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+  opacity: 0.7;
+}
+
+.contact-link {
+  color: var(--sage);
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+body.night .contact-link {
+  color: #c2cc8a;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .problem-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .time-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+}
+</style>
+</head>
+<body class="day">
+
+<!-- Interactive Farm Background -->
+<canvas id="farm-bg"></canvas>
+
+<!-- Time of day toggle button -->
+<button class="time-toggle" id="timeToggle" title="Toggle day/night">☀️</button>
+
+<header>
+  <img src="Apiflair_Logo_big.png" alt="APIFLAIR" class="logo-img">
+  <a href="mailto:shrutichoudhary@apiflairtech.com" class="cta-button">Get in Touch</a>
+</header>
+
+<section class="hero">
+  <h1>Our food security faces <span class="highlight">an invisible crisis</span></h1>
+  <p class="hero-subtitle">Climate change is accelerating crop diseases faster than we can detect them. The consequences ripple through our entire agricultural ecosystem.</p>
+</section>
+
+<div class="problem-grid">
+  <div class="problem-card">
+    <div class="problem-number">01</div>
+    <h3>The Detection Gap</h3>
+    <p>Crop diseases spread rapidly across large farmlands, often invisible until it's too late. By the time symptoms appear, significant damage is already done.</p>
+    <p>Traditional visual inspection methods can't keep pace with climate-driven pathogens. Farmers are left guessing, leading to reactive rather than preventive measures.</p>
+    <span class="stat">40% of crops lost annually</span>
+    <span class="stat">$220B in trade losses</span>
+  </div>
+
+  <div class="problem-card">
+    <div class="problem-number">02</div>
+    <h3>The Pollination Crisis</h3>
+    <p>Commercial bee colonies are collapsing at alarming rates. Hive transport stress and pesticide exposure are making pollination services increasingly unreliable and expensive.</p>
+    <p>Without stable pollination, entire crop systems face existential risk. The supply chain that feeds billions is breaking down.</p>
+    <span class="stat">30-40% hive losses</span>
+    <span class="stat">$634.7M in beekeeper losses</span>
+  </div>
+</div>
+
+<section class="impact-section">
+  <div class="impact-content">
+    <h2>A Destructive Cycle</h2>
+    <p>These aren't separate problems—they're interconnected parts of a collapsing ecosystem.</p>
+
+    <div class="ecosystem-note">
+      <strong>Crop diseases trigger excessive fumigation.</strong> Fumigation harms natural pollinators. Pollinator loss reduces crop health. Weakened crops become more susceptible to disease. The cycle intensifies.
+    </div>
+
+    <p>Every season, farmers face impossible choices: protect their crops with chemicals that harm the very insects they need for pollination, or risk losing everything to disease.</p>
+  </div>
+</section>
+
+<section class="solution-teaser">
+  <h2>What if we could break this cycle?</h2>
+  <p>We're building technology that addresses both challenges simultaneously—offering farmers real-time biosurveillance and reliable pollination services.</p>
+  <p>Nature-inspired. Intelligent. Designed for the farms of tomorrow.</p>
+
+  <div class="waitlist-box">
+    <h3>Join the Waitlist</h3>
+    <p>Be among the first to protect your crops with next-generation agricultural technology. Limited early access spots available.</p>
+
+    <div class="waitlist-form" id="waitlistForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="wl-name">Full Name *</label>
+          <input type="text" id="wl-name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="wl-email">Email *</label>
+          <input type="email" id="wl-email" placeholder="you@example.com" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="wl-org">Farm / Organization</label>
+          <input type="text" id="wl-org" placeholder="Organization name">
+        </div>
+        <div class="form-group">
+          <label for="wl-crop">Primary Crop Type</label>
+          <select id="wl-crop">
+            <option value="">Select crop type</option>
+            <option value="grains">Grains & Cereals</option>
+            <option value="fruits">Fruits</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="nuts">Nuts & Seeds</option>
+            <option value="cotton">Cotton / Fiber</option>
+            <option value="mixed">Mixed / Multiple</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="wl-acreage">Acreage</label>
+          <input type="text" id="wl-acreage" placeholder="e.g. 500 acres">
+        </div>
+        <div class="form-group">
+          <label for="wl-location">Location / Region</label>
+          <input type="text" id="wl-location" placeholder="State or region">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="wl-notes">Anything else you'd like us to know?</label>
+        <textarea id="wl-notes" placeholder="Tell us about your biggest crop challenges..."></textarea>
+      </div>
+
+      <button class="cta-button submit-btn" id="submitBtn" onclick="submitWaitlist()">Reserve Your Spot</button>
+    </div>
+
+    <div class="form-success" id="formSuccess">
+      <div class="check-icon">✓</div>
+      <h4>You're on the list!</h4>
+      <p>We'll be in touch soon with early access details. Thank you for joining the movement to protect our food future.</p>
+    </div>
+  </div>
+
+  <p style="margin-top: 2rem; font-size: 0.95rem; color: #6b6159;">Questions? <a href="mailto:shrutichoudhary@apiflairtech.com" class="contact-link">Contact us directly</a></p>
+</section>
+
+<footer>
+  <p><strong>APIFLAIR TECHNOLOGIES LLC</strong></p>
+  <p>Registered in Florida</p>
+  <p style="margin-top: 1rem;"><a href="mailto:shrutichoudhary@apiflairtech.com">shrutichoudhary@apiflairtech.com</a></p>
+  <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">© 2026 APIFLAIR. All rights reserved.</p>
+</footer>
+
+<script>
+// ===== WAITLIST FORM SUBMISSION =====
+function submitWaitlist() {
+  const name = document.getElementById('wl-name').value.trim();
+  const email = document.getElementById('wl-email').value.trim();
+
+  if (!name || !email) {
+    alert('Please fill in your name and email.');
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  // Collect form data
+  const data = {
+    name: name,
+    email: email,
+    organization: document.getElementById('wl-org').value.trim(),
+    crop: document.getElementById('wl-crop').value,
+    acreage: document.getElementById('wl-acreage').value.trim(),
+    location: document.getElementById('wl-location').value.trim(),
+    notes: document.getElementById('wl-notes').value.trim(),
+    timestamp: new Date().toISOString()
+  };
+
+  // Send via mailto as a fallback (works without backend)
+  const subject = encodeURIComponent('Waitlist Signup - ' + data.name);
+  const body = encodeURIComponent(
+    `New Waitlist Signup\n` +
+    `━━━━━━━━━━━━━━━━━━━\n` +
+    `Name: ${data.name}\n` +
+    `Email: ${data.email}\n` +
+    `Organization: ${data.organization || 'N/A'}\n` +
+    `Crop Type: ${data.crop || 'N/A'}\n` +
+    `Acreage: ${data.acreage || 'N/A'}\n` +
+    `Location: ${data.location || 'N/A'}\n` +
+    `Notes: ${data.notes || 'N/A'}\n` +
+    `Submitted: ${data.timestamp}`
+  );
+
+  // Open mailto in background
+  const mailLink = document.createElement('a');
+  mailLink.href = `mailto:shrutichoudhary@apiflairtech.com?subject=${subject}&body=${body}`;
+  mailLink.click();
+
+  // Show success state
+  document.getElementById('waitlistForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+
+// ===== INTERACTIVE FARM BACKGROUND =====
+const canvas = document.getElementById('farm-bg');
+const ctx = canvas.getContext('2d');
+let isNight = false;
+let transitionProgress = 0; // 0 = day, 1 = night
+let targetProgress = 0;
+let width, height;
+let stars = [];
+let clouds = [];
+let fireflies = [];
+let mouseX = 0, mouseY = 0;
+
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  generateStars();
+  generateClouds();
+  generateFireflies();
+}
+
+function generateStars() {
+  stars = [];
+  for (let i = 0; i < 120; i++) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height * 0.55,
+      size: Math.random() * 2.5 + 0.5,
+      twinkleSpeed: Math.random() * 0.03 + 0.01,
+      twinkleOffset: Math.random() * Math.PI * 2
+    });
+  }
+}
+
+function generateClouds() {
+  clouds = [];
+  for (let i = 0; i < 5; i++) {
+    clouds.push({
+      x: Math.random() * width * 1.5 - width * 0.25,
+      y: height * 0.08 + Math.random() * height * 0.2,
+      scale: Math.random() * 0.6 + 0.6,
+      speed: Math.random() * 0.3 + 0.1,
+      opacity: Math.random() * 0.3 + 0.3
+    });
+  }
+}
+
+function generateFireflies() {
+  fireflies = [];
+  for (let i = 0; i < 25; i++) {
+    fireflies.push({
+      x: Math.random() * width,
+      y: height * 0.5 + Math.random() * height * 0.35,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.3,
+      glowPhase: Math.random() * Math.PI * 2,
+      glowSpeed: Math.random() * 0.04 + 0.02,
+      size: Math.random() * 2 + 1
+    });
+  }
+}
+
+window.addEventListener('resize', resize);
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+// Time toggle
+const toggleBtn = document.getElementById('timeToggle');
+toggleBtn.addEventListener('click', () => {
+  isNight = !isNight;
+  targetProgress = isNight ? 1 : 0;
+  document.body.className = isNight ? 'night' : 'day';
+  toggleBtn.textContent = isNight ? '🌙' : '☀️';
+});
+
+// Auto-detect time of day on load
+(function autoDetectTime() {
+  const hour = new Date().getHours();
+  if (hour >= 19 || hour < 6) {
+    isNight = true;
+    targetProgress = 1;
+    transitionProgress = 1;
+    document.body.className = 'night';
+    toggleBtn.textContent = '🌙';
+  }
+})();
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpColor(c1, c2, t) {
+  return [
+    Math.round(lerp(c1[0], c2[0], t)),
+    Math.round(lerp(c1[1], c2[1], t)),
+    Math.round(lerp(c1[2], c2[2], t))
+  ];
+}
+
+let time = 0;
+
+function drawSky(t) {
+  const dayTop = [180, 216, 234];
+  const dayBot = [220, 235, 245];
+  const nightTop = [8, 12, 32];
+  const nightBot = [18, 24, 58];
+
+  const top = lerpColor(dayTop, nightTop, t);
+  const bot = lerpColor(dayBot, nightBot, t);
+
+  const grad = ctx.createLinearGradient(0, 0, 0, height * 0.65);
+  grad.addColorStop(0, `rgb(${top[0]},${top[1]},${top[2]})`);
+  grad.addColorStop(1, `rgb(${bot[0]},${bot[1]},${bot[2]})`);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, width, height);
+}
+
+function drawSun(t) {
+  if (t >= 1) return;
+  const opacity = 1 - t;
+  const sunX = width * 0.78 + (mouseX - width / 2) * 0.01;
+  const sunY = height * 0.18 + (mouseY - height / 2) * 0.005 + t * 80;
+
+  // Glow
+  const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 120);
+  glowGrad.addColorStop(0, `rgba(255, 220, 100, ${0.25 * opacity})`);
+  glowGrad.addColorStop(0.5, `rgba(255, 200, 60, ${0.08 * opacity})`);
+  glowGrad.addColorStop(1, 'rgba(255, 200, 60, 0)');
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, 0, width, height);
+
+  // Sun disc
+  ctx.beginPath();
+  ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255, 210, 80, ${opacity})`;
+  ctx.fill();
+
+  // Sun rays
+  ctx.save();
+  ctx.translate(sunX, sunY);
+  ctx.rotate(time * 0.2);
+  for (let i = 0; i < 12; i++) {
+    ctx.rotate(Math.PI / 6);
+    ctx.beginPath();
+    ctx.moveTo(48, 0);
+    ctx.lineTo(62 + Math.sin(time + i) * 5, 0);
+    ctx.strokeStyle = `rgba(255, 210, 80, ${0.3 * opacity})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawMoon(t) {
+  if (t <= 0) return;
+  const opacity = t;
+  const moonX = width * 0.75 + (mouseX - width / 2) * 0.008;
+  const moonY = height * 0.16 + (mouseY - height / 2) * 0.004 - (1 - t) * 60;
+
+  // Moon glow
+  const glowGrad = ctx.createRadialGradient(moonX, moonY, 0, moonX, moonY, 100);
+  glowGrad.addColorStop(0, `rgba(200, 210, 240, ${0.2 * opacity})`);
+  glowGrad.addColorStop(1, 'rgba(200, 210, 240, 0)');
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, 0, width, height);
+
+  // Moon disc
+  ctx.beginPath();
+  ctx.arc(moonX, moonY, 32, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(230, 235, 250, ${opacity})`;
+  ctx.fill();
+
+  // Crescent shadow
+  ctx.beginPath();
+  ctx.arc(moonX + 10, moonY - 5, 26, 0, Math.PI * 2);
+  const nightSky = lerpColor([8,12,32],[18,24,58], 0.3);
+  ctx.fillStyle = `rgba(${nightSky[0]},${nightSky[1]},${nightSky[2]}, ${opacity})`;
+  ctx.fill();
+}
+
+function drawStars(t) {
+  if (t <= 0) return;
+  stars.forEach(s => {
+    const twinkle = (Math.sin(time * s.twinkleSpeed * 60 + s.twinkleOffset) + 1) / 2;
+    const alpha = t * (0.3 + twinkle * 0.7);
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size * (0.6 + twinkle * 0.4), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(240, 240, 255, ${alpha})`;
+    ctx.fill();
+  });
+}
+
+function drawClouds(t) {
+  if (t >= 1) return;
+  const opacity = (1 - t);
+  clouds.forEach(c => {
+    c.x += c.speed;
+    if (c.x > width + 200) c.x = -300;
+
+    const cx = c.x + (mouseX - width/2) * 0.005;
+    const cy = c.y + (mouseY - height/2) * 0.002;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(c.scale, c.scale);
+    ctx.globalAlpha = c.opacity * opacity;
+
+    ctx.fillStyle = `rgba(255,255,255,0.8)`;
+    // Cloud shape - overlapping circles
+    ctx.beginPath();
+    ctx.arc(0, 0, 35, 0, Math.PI * 2);
+    ctx.arc(30, -10, 30, 0, Math.PI * 2);
+    ctx.arc(55, 0, 28, 0, Math.PI * 2);
+    ctx.arc(15, 10, 25, 0, Math.PI * 2);
+    ctx.arc(40, 12, 22, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  });
+}
+
+function drawGround(t) {
+  const groundY = height * 0.62;
+
+  // Distant hills
+  const hillDayColor = [160, 180, 110];
+  const hillNightColor = [20, 35, 25];
+  const hillC = lerpColor(hillDayColor, hillNightColor, t);
+
+  ctx.beginPath();
+  ctx.moveTo(0, groundY + 20);
+  for (let x = 0; x <= width; x += 2) {
+    const y = groundY + 20
+      + Math.sin(x * 0.003 + 1) * 30
+      + Math.sin(x * 0.007) * 15;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(width, height);
+  ctx.lineTo(0, height);
+  ctx.closePath();
+  ctx.fillStyle = `rgb(${hillC[0]},${hillC[1]},${hillC[2]})`;
+  ctx.fill();
+
+  // Main ground
+  const groundDayColor = [120, 150, 75];
+  const groundNightColor = [15, 28, 18];
+  const gC = lerpColor(groundDayColor, groundNightColor, t);
+
+  ctx.beginPath();
+  ctx.moveTo(0, groundY + 55);
+  for (let x = 0; x <= width; x += 2) {
+    const y = groundY + 55
+      + Math.sin(x * 0.005 + 2) * 12
+      + Math.sin(x * 0.012) * 6;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(width, height);
+  ctx.lineTo(0, height);
+  ctx.closePath();
+  ctx.fillStyle = `rgb(${gC[0]},${gC[1]},${gC[2]})`;
+  ctx.fill();
+
+  // Soil
+  const soilDay = [85, 65, 40];
+  const soilNight = [18, 14, 10];
+  const sC = lerpColor(soilDay, soilNight, t);
+
+  ctx.fillStyle = `rgb(${sC[0]},${sC[1]},${sC[2]})`;
+  ctx.fillRect(0, height * 0.88, width, height * 0.12);
+}
+
+function drawCropRows(t) {
+  const baseY = height * 0.72;
+  const cropDay = [90, 130, 50];
+  const cropNight = [20, 42, 20];
+  const stemDay = [70, 100, 40];
+  const stemNight = [15, 30, 15];
+
+  const cC = lerpColor(cropDay, cropNight, t);
+  const sC = lerpColor(stemDay, stemNight, t);
+
+  // Draw rows of crops
+  for (let row = 0; row < 4; row++) {
+    const rowY = baseY + row * 30;
+    const rowScale = 1 - row * 0.1;
+    const spacing = 28 + row * 4;
+
+    for (let x = 10 + row * 15; x < width - 10; x += spacing) {
+      const sway = Math.sin(time * 1.5 + x * 0.02 + row) * 3 * rowScale;
+      const cropH = (22 + Math.sin(x * 0.1) * 8) * rowScale;
+
+      // Stem
+      ctx.beginPath();
+      ctx.moveTo(x, rowY);
+      ctx.quadraticCurveTo(x + sway * 0.5, rowY - cropH * 0.5, x + sway, rowY - cropH);
+      ctx.strokeStyle = `rgb(${sC[0]},${sC[1]},${sC[2]})`;
+      ctx.lineWidth = 1.5 * rowScale;
+      ctx.stroke();
+
+      // Leaf / head
+      ctx.beginPath();
+      ctx.arc(x + sway, rowY - cropH, 3.5 * rowScale, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${cC[0]},${cC[1]},${cC[2]})`;
+      ctx.fill();
+    }
+  }
+}
+
+function drawBarn(t) {
+  const barnX = width * 0.15 + (mouseX - width/2) * 0.003;
+  const barnY = height * 0.6;
+  const bw = 70, bh = 55;
+
+  // Barn wall
+  const wallDay = [160, 60, 40];
+  const wallNight = [50, 18, 14];
+  const wC = lerpColor(wallDay, wallNight, t);
+
+  ctx.fillStyle = `rgb(${wC[0]},${wC[1]},${wC[2]})`;
+  ctx.fillRect(barnX - bw/2, barnY - bh, bw, bh);
+
+  // Roof
+  const roofDay = [100, 40, 25];
+  const roofNight = [35, 12, 10];
+  const rC = lerpColor(roofDay, roofNight, t);
+
+  ctx.beginPath();
+  ctx.moveTo(barnX - bw/2 - 10, barnY - bh);
+  ctx.lineTo(barnX, barnY - bh - 35);
+  ctx.lineTo(barnX + bw/2 + 10, barnY - bh);
+  ctx.closePath();
+  ctx.fillStyle = `rgb(${rC[0]},${rC[1]},${rC[2]})`;
+  ctx.fill();
+
+  // Door
+  ctx.fillStyle = `rgba(0,0,0, ${0.3 + t * 0.3})`;
+  ctx.fillRect(barnX - 8, barnY - 30, 16, 30);
+
+  // Window glow at night
+  if (t > 0.3) {
+    const glowAlpha = (t - 0.3) / 0.7;
+    ctx.fillStyle = `rgba(255, 200, 80, ${glowAlpha * 0.7})`;
+    ctx.fillRect(barnX - bw/2 + 8, barnY - bh + 12, 14, 10);
+    ctx.fillRect(barnX + bw/2 - 22, barnY - bh + 12, 14, 10);
+
+    // Window glow effect
+    const wgGrad = ctx.createRadialGradient(barnX - bw/2 + 15, barnY - bh + 17, 0, barnX - bw/2 + 15, barnY - bh + 17, 30);
+    wgGrad.addColorStop(0, `rgba(255, 200, 80, ${glowAlpha * 0.15})`);
+    wgGrad.addColorStop(1, 'rgba(255, 200, 80, 0)');
+    ctx.fillStyle = wgGrad;
+    ctx.fillRect(barnX - bw/2 - 15, barnY - bh - 10, 60, 50);
+  }
+}
+
+function drawSilo(t) {
+  const sx = width * 0.22 + (mouseX - width/2) * 0.003;
+  const sy = height * 0.6;
+  const sw = 22, sh = 70;
+
+  const siloDay = [180, 175, 165];
+  const siloNight = [45, 43, 40];
+  const sC = lerpColor(siloDay, siloNight, t);
+
+  ctx.fillStyle = `rgb(${sC[0]},${sC[1]},${sC[2]})`;
+  ctx.fillRect(sx - sw/2, sy - sh, sw, sh);
+
+  // Dome top
+  ctx.beginPath();
+  ctx.arc(sx, sy - sh, sw/2, Math.PI, 0);
+  ctx.fill();
+
+  // Roof cap
+  const capDay = [140, 135, 125];
+  const capNight = [35, 33, 30];
+  const cpC = lerpColor(capDay, capNight, t);
+  ctx.beginPath();
+  ctx.arc(sx, sy - sh, sw/2 + 2, Math.PI, 0);
+  ctx.fillStyle = `rgb(${cpC[0]},${cpC[1]},${cpC[2]})`;
+  ctx.fill();
+}
+
+function drawWindmill(t) {
+  const wx = width * 0.85 + (mouseX - width/2) * 0.004;
+  const wy = height * 0.55;
+
+  const poleDay = [130, 125, 115];
+  const poleNight = [35, 33, 30];
+  const pC = lerpColor(poleDay, poleNight, t);
+
+  // Pole
+  ctx.strokeStyle = `rgb(${pC[0]},${pC[1]},${pC[2]})`;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(wx, wy);
+  ctx.lineTo(wx, wy + 80);
+  ctx.stroke();
+
+  // Blades
+  ctx.save();
+  ctx.translate(wx, wy);
+  ctx.rotate(time * 1.2);
+  const bladeDay = [200, 195, 185];
+  const bladeNight = [50, 48, 45];
+  const bC = lerpColor(bladeDay, bladeNight, t);
+
+  for (let i = 0; i < 4; i++) {
+    ctx.rotate(Math.PI / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-4, -35);
+    ctx.lineTo(0, -38);
+    ctx.lineTo(4, -35);
+    ctx.closePath();
+    ctx.fillStyle = `rgb(${bC[0]},${bC[1]},${bC[2]})`;
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Center hub
+  ctx.beginPath();
+  ctx.arc(wx, wy, 4, 0, Math.PI * 2);
+  ctx.fillStyle = `rgb(${pC[0]},${pC[1]},${pC[2]})`;
+  ctx.fill();
+}
+
+function drawFireflies(t) {
+  if (t < 0.5) return;
+  const opacity = (t - 0.5) / 0.5;
+
+  fireflies.forEach(f => {
+    f.x += f.vx;
+    f.y += f.vy;
+    f.glowPhase += f.glowSpeed;
+
+    // Gentle bounce
+    if (f.x < 0 || f.x > width) f.vx *= -1;
+    if (f.y < height * 0.5 || f.y > height * 0.85) f.vy *= -1;
+
+    const glow = (Math.sin(f.glowPhase) + 1) / 2;
+    const alpha = opacity * glow * 0.8;
+
+    const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 6);
+    grad.addColorStop(0, `rgba(200, 220, 100, ${alpha})`);
+    grad.addColorStop(0.4, `rgba(180, 200, 80, ${alpha * 0.4})`);
+    grad.addColorStop(1, 'rgba(180, 200, 80, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.size * 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(240, 255, 150, ${alpha})`;
+    ctx.fill();
+  });
+}
+
+function drawFence(t) {
+  const fenceDay = [140, 120, 85];
+  const fenceNight = [35, 30, 22];
+  const fC = lerpColor(fenceDay, fenceNight, t);
+  const fenceY = height * 0.78;
+
+  ctx.strokeStyle = `rgb(${fC[0]},${fC[1]},${fC[2]})`;
+  ctx.lineWidth = 1.5;
+
+  // Horizontal rails
+  ctx.beginPath();
+  ctx.moveTo(0, fenceY);
+  ctx.lineTo(width, fenceY);
+  ctx.moveTo(0, fenceY + 12);
+  ctx.lineTo(width, fenceY + 12);
+  ctx.stroke();
+
+  // Posts
+  for (let x = 30; x < width; x += 60) {
+    ctx.beginPath();
+    ctx.moveTo(x, fenceY - 8);
+    ctx.lineTo(x, fenceY + 20);
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+    ctx.lineWidth = 1.5;
+  }
+}
+
+function animate() {
+  time += 0.016;
+
+  // Smooth transition
+  transitionProgress += (targetProgress - transitionProgress) * 0.025;
+  const t = transitionProgress;
+
+  ctx.clearRect(0, 0, width, height);
+
+  drawSky(t);
+  drawStars(t);
+  drawSun(t);
+  drawMoon(t);
+  drawClouds(t);
+  drawGround(t);
+  drawBarn(t);
+  drawSilo(t);
+  drawWindmill(t);
+  drawCropRows(t);
+  drawFence(t);
+  drawFireflies(t);
+
+  requestAnimationFrame(animate);
+}
+
+resize();
+animate();
+</script>
+</body>
+</html>
